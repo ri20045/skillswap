@@ -8,8 +8,7 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
-
-const API = "http://localhost:4000/api";
+import { API } from "./config";
 
 /* ================= SMALL UI COMPONENTS ================= */
 

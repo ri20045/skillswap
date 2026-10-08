@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-
-const API = "http://localhost:4000/api";
+import { API } from "./config";
 
 export default function AnnouncementBar() {
   const [items, setItems] = useState([]);

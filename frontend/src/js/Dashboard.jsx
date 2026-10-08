@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useToast } from "./ToastProvider";
+import { API } from "./config";
 
 const Dashboard = ({ user, onNavigate }) => {
   const [stats, setStats] = useState({
@@ -33,7 +34,7 @@ const Dashboard = ({ user, onNavigate }) => {
     const fetchStats = async (showSpinner = false) => {
       if (showSpinner) setLoading(true);
       try {
-        const res = await fetch(`http://localhost:4000/api/sessions/${user.email}`);
+        const res = await fetch(`${API}/sessions/${user.email}`);
         if (!res.ok) throw new Error("Failed to load sessions");
         const sessions = await res.json();
 
@@ -80,7 +81,7 @@ const Dashboard = ({ user, onNavigate }) => {
   useEffect(() => {
     if (!user?.email) return;
 
-    fetch(`http://localhost:4000/api/match/${user.email}`)
+    fetch(`${API}/match/${user.email}`)
       .then((res) => res.json())
       .then((data) => {
         const canTeach = data.filter((u) => u.isPotentialTeacher);
@@ -92,7 +93,7 @@ const Dashboard = ({ user, onNavigate }) => {
   // Load skills
   useEffect(() => {
     if (!user?.email) return;
-    fetch(`http://localhost:4000/api/skills/${user.email}`)
+    fetch(`${API}/skills/${user.email}`)
       .then((res) => res.json())
       .then((data) =>
         setSkills({
@@ -108,7 +109,7 @@ const Dashboard = ({ user, onNavigate }) => {
     if (!normalized) return;
     const updated = [...new Set([...skills.have, normalized])];
     try {
-      await fetch(`http://localhost:4000/api/skills/${user.email}`, {
+      await fetch(`${API}/skills/${user.email}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ skillsIHave: updated, skillsIWant: skills.want }),
@@ -128,7 +129,7 @@ const Dashboard = ({ user, onNavigate }) => {
       return;
     }
     try {
-      const res = await fetch("http://localhost:4000/api/sessions", {
+      const res = await fetch(`${API}/sessions`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -153,7 +154,7 @@ const Dashboard = ({ user, onNavigate }) => {
   // Ratings for current user
   useEffect(() => {
     if (!user?.email) return;
-    fetch("http://localhost:4000/api/ratings")
+    fetch(`${API}/ratings`)
       .then((res) => res.json())
       .then((data) => {
         const mine = data.filter((r) => r.toEmail === user.email);

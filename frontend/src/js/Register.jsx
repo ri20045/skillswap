@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useToast } from "./ToastProvider";
+import { API } from "./config";
 
 const Register = ({ onLoginClick }) => {
   const [name, setName] = useState("");
@@ -19,7 +20,7 @@ const Register = ({ onLoginClick }) => {
     }
 
     try {
-      const res = await fetch("http://localhost:4000/api/register", {
+      const res = await fetch(`${API}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),

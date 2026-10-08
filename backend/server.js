@@ -15,7 +15,7 @@ try {
 require("dotenv").config();
 
 const app = express();
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 const http = require("http");
 
 // Middleware
@@ -25,8 +25,9 @@ app.use(express.json());
 // ---------------------------------------------------------
 // 🔌 MongoDB Connection
 // ---------------------------------------------------------
+const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/skillswap";
 mongoose
-  .connect("mongodb://127.0.0.1:27017/skillswap")
+  .connect(MONGO_URI)
   .then(() => console.log("MongoDB Connected ✅"))
   .catch((err) => console.error("MongoDB Error:", err));
 

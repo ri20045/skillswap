@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useToast } from "./ToastProvider";
+import { API } from "./config";
 
 const BrowseSkills = ({ user }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -15,7 +16,7 @@ const BrowseSkills = ({ user }) => {
 
   useEffect(() => {
     if (!user?.email) return;
-    fetch(`http://localhost:4000/api/match/${user.email}`)
+    fetch(`${API}/match/${user.email}`)
       .then((res) => res.json())
       .then((data) => {
         setAllUsers(data);
@@ -25,7 +26,7 @@ const BrowseSkills = ({ user }) => {
   }, [user?.email]);
 
   useEffect(() => {
-    fetch("http://localhost:4000/api/ratings")
+    fetch(`${API}/ratings`)
       .then((res) => res.json())
       .then((data) => {
         setRatings(data);
@@ -349,7 +350,7 @@ const BrowseSkills = ({ user }) => {
                   }
                   setRequesting(true);
                   try {
-                    const res = await fetch("http://localhost:4000/api/sessions", {
+                    const res = await fetch(`${API}/sessions`, {
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
                       body: JSON.stringify({

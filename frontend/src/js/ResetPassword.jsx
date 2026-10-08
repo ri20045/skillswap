@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useToast } from "./ToastProvider";
+import { API } from "./config";
 
 const ResetPassword = ({ token, email }) => {
   const [password, setPassword] = useState("");
@@ -18,7 +19,7 @@ const ResetPassword = ({ token, email }) => {
     }
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:4000/api/password/reset", {
+      const res = await fetch(`${API}/password/reset`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, token, newPassword: password }),

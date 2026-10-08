@@ -1,6 +1,6 @@
-// src/Request.jsx
 import React, { useState, useEffect } from "react";
 import { useToast } from "./ToastProvider";
+import { API } from "./config";
 
 const Request = ({ user }) => {
   const [mentors, setMentors] = useState([]);
@@ -13,7 +13,7 @@ const Request = ({ user }) => {
   // Fetch all users (mentors)
   useEffect(() => {
     if (!user?.email) return;
-    fetch(`http://localhost:4000/api/match/${user.email}`)
+    fetch(`${API}/match/${user.email}`)
       .then((res) => res.json())
       .then((data) => {
         setMentors(data.filter((u) => u.email !== user.email));
@@ -33,7 +33,7 @@ const Request = ({ user }) => {
   const sendRequest = async () => {
     if (!selectedRequest) return;
     try {
-      const res = await fetch("http://localhost:4000/api/sessions", {
+      const res = await fetch(`${API}/sessions`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

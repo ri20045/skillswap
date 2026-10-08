@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useToast } from "./ToastProvider";
+import { API } from "./config";
 
 const MySessions = ({ user }) => {
   const [sessions, setSessions] = useState([]);
@@ -45,7 +46,7 @@ const MySessions = ({ user }) => {
 
   const fetchSessions = useCallback(() => {
     if (!user?.email) return;
-    fetch(`http://localhost:4000/api/sessions/${user.email}`)
+    fetch(`${API}/sessions/${user.email}`)
       .then((res) => res.json())
       .then((data) => {
         setSessions(data);
@@ -63,7 +64,7 @@ const MySessions = ({ user }) => {
 
   // ---------- Simple REST-based signaling for video ----------
   const sendSignal = async (sessionId, kind, payload) => {
-    await fetch(`http://localhost:4000/api/call/${sessionId}/${kind}`, {
+    await fetch(`${API}/call/${sessionId}/${kind}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload || {}),
@@ -72,7 +73,7 @@ const MySessions = ({ user }) => {
 
   const pollSignals = async (sessionId, currentIndex, handler) => {
     const res = await fetch(
-      `http://localhost:4000/api/call/${sessionId}/messages?since=${currentIndex || 0}`,
+      `${API}/call/${sessionId}/messages?since=${currentIndex || 0}`,
       { cache: "no-store" }
     );
     if (!res.ok) return currentIndex;
@@ -85,7 +86,7 @@ const MySessions = ({ user }) => {
   };
 
   const handleSendMessage = () => {
-    fetch(`http://localhost:4000/api/sessions/${replyModal._id}`, {
+    fetch(`${API}/sessions/${replyModal._id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -102,7 +103,7 @@ const MySessions = ({ user }) => {
 
   const handleDelete = async (id) => {
     try {
-      await fetch(`http://localhost:4000/api/sessions/${id}`, { method: "DELETE" });
+      await fetch(`${API}/sessions/${id}`, { method: "DELETE" });
       toast("Chat deleted", "success");
       fetchSessions();
     } catch (err) {
@@ -112,7 +113,7 @@ const MySessions = ({ user }) => {
 
   const handleStatusChange = async (session, status) => {
     try {
-      const res = await fetch(`http://localhost:4000/api/sessions/${session._id}`, {
+      const res = await fetch(`${API}/sessions/${session._id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -137,7 +138,7 @@ const MySessions = ({ user }) => {
 
   const handleSubmitRating = () => {
     if (!rateModal) return;
-    fetch(`http://localhost:4000/api/sessions/${rateModal._id}`, {
+    fetch(`${API}/sessions/${rateModal._id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -164,7 +165,7 @@ const MySessions = ({ user }) => {
 
   const sendAttachmentMessage = async (session, attachmentMeta) => {
     try {
-      const res = await fetch(`http://localhost:4000/api/sessions/${session._id}`, {
+      const res = await fetch(`${API}/sessions/${session._id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -186,7 +187,7 @@ const MySessions = ({ user }) => {
       return;
     }
     try {
-      const res = await fetch(`http://localhost:4000/api/sessions/${session._id}/meet/create`, {
+      const res = await fetch(`${API}/sessions/${session._id}/meet/create`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ meetLink: meetURL, hostEmail: user.email }),
@@ -204,7 +205,7 @@ const MySessions = ({ user }) => {
 
   const handleRequestMeet = async (session) => {
     try {
-      const res = await fetch(`http://localhost:4000/api/sessions/${session._id}`, {
+      const res = await fetch(`${API}/sessions/${session._id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -307,7 +308,7 @@ const MySessions = ({ user }) => {
 
       // If no offer exists, create one
       const msgs = await fetch(
-        `http://localhost:4000/api/call/${session._id}/messages?since=0`
+        `${API}/call/${session._id}/messages?since=0`
       ).then((r) => r.json());
       idx = msgs.nextIndex || 0;
       const offers = (msgs.messages || []).filter((m) => m.type === "offer");
@@ -367,7 +368,7 @@ const MySessions = ({ user }) => {
     try {
       const form = new FormData();
       form.append("file", file);
-      const res = await fetch("http://localhost:4000/api/uploads", { method: "POST", body: form });
+      const res = await fetch(`${API}/uploads`, { method: "POST", body: form });
       if (!res.ok) throw new Error("upload failed");
       const meta = await res.json();
       await sendAttachmentMessage(session, meta);

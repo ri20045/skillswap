@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useToast } from "./ToastProvider";
 import AdminDashboard from "./ADashboard";
+import { API } from "./config";
 
 const Login = ({ onRegisterClick, onLoginSuccess }) => {
 const [email, setEmail] = useState("");
@@ -30,7 +31,7 @@ const toast = useToast();
     }
 
     try {
-      const res = await fetch("http://localhost:4000/api/login", {
+      const res = await fetch(`${API}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -64,7 +65,7 @@ toast("Enter your email", "error");
 return;
 }
 try {
-const res = await fetch("http://localhost:4000/api/password/forgot", {
+const res = await fetch(`${API}/password/forgot`, {
 method: "POST",
 headers: { "Content-Type": "application/json" },
 body: JSON.stringify({ email: resetEmail }),

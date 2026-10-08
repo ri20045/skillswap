@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useToast } from "./ToastProvider";
+import { API } from "./config";
 
 const Profile = ({ user, setUser }) => {
   const [skillsIHave, setSkillsIHave] = useState([]);
@@ -18,7 +19,7 @@ const Profile = ({ user, setUser }) => {
 
   // Load skills
   useEffect(() => {
-    fetch(`http://localhost:4000/api/skills/${user.email}`)
+    fetch(`${API}/skills/${user.email}`)
       .then((res) => res.json())
       .then((data) => {
         setSkillsIHave(data.skillsIHave || []);
@@ -32,7 +33,7 @@ const Profile = ({ user, setUser }) => {
   }, [user.name]);
 
   const saveSkills = (have, want) => {
-    fetch(`http://localhost:4000/api/skills/${user.email}`, {
+    fetch(`${API}/skills/${user.email}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ skillsIHave: have, skillsIWant: want }),
@@ -70,7 +71,7 @@ const Profile = ({ user, setUser }) => {
   };
 
   const findMatches = () => {
-    fetch(`http://localhost:4000/api/match/${user.email}`)
+    fetch(`${API}/match/${user.email}`)
       .then((res) => res.json())
       .then((data) => setMatches(data));
   };
@@ -83,7 +84,7 @@ const Profile = ({ user, setUser }) => {
   const handleSendCompose = async () => {
     if (!composeTarget) return;
     try {
-      const res = await fetch("http://localhost:4000/api/sessions", {
+      const res = await fetch(`${API}/sessions`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -107,7 +108,7 @@ const Profile = ({ user, setUser }) => {
 
   // Fetch ratings/feedback about me
   useEffect(() => {
-    fetch("http://localhost:4000/api/ratings")
+    fetch(`${API}/ratings`)
       .then((res) => res.json())
       .then((data) => {
         const mine = data.filter((r) => r.toEmail === user.email);
@@ -125,7 +126,7 @@ const Profile = ({ user, setUser }) => {
 
     setSavingAccount(true);
     try {
-      const res = await fetch(`http://localhost:4000/api/users/${user.email}`, {
+      const res = await fetch(`${API}/users/${user.email}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
