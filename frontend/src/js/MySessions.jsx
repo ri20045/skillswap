@@ -23,7 +23,6 @@ const MySessions = ({ user }) => {
   const [pc, setPc] = useState(null);
   const [localStream, setLocalStream] = useState(null);
   const [remoteStream, setRemoteStream] = useState(null);
-  const [signalIndex, setSignalIndex] = useState(0);
   const [callStatus, setCallStatus] = useState("");
   const [camOn, setCamOn] = useState(true);
   const [micOn, setMicOn] = useState(true);
@@ -459,7 +458,6 @@ const MySessions = ({ user }) => {
             const created = s.timestamp ? new Date(s.timestamp).toLocaleDateString() : "";
             const currentMeetLink = meetLinks[s._id] || s.meetLink;
             const canCreateMeet = ["accepted", "active"].includes(status) && isIncoming && !currentMeetLink;
-            const canRequestMeet = ["accepted", "active"].includes(status) && !isIncoming && !currentMeetLink;
 
             return (
               <div key={s._id} className="bg-blue-500/5 border border-blue-500/20 rounded-2xl p-5 relative">
