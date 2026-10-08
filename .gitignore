@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+.venv/
+
+# Environment variables & secrets
+.env
+*.env
+.env.local
+
+# Build outputs
+build/
+dist/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Uploads / user data (optional: keep folder, ignore uploads)
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
